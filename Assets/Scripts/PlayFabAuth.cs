@@ -9,6 +9,7 @@ using TMPro;
 
 public class PlayFabAuth : MonoBehaviour
 {
+    public MPManager mp;
     public TMP_InputField user;
     public TMP_InputField password;
     public TMP_InputField email;
@@ -35,6 +36,7 @@ public class PlayFabAuth : MonoBehaviour
             //If acc found
             message.text = "Welcome "+ user.text+" Connecting...";
             isAuthenticated = true;
+            mp.ConnectToMaster();
             Debug.Log("You're logged in");
         }, error => {
             //If not found
