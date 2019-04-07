@@ -36,6 +36,7 @@ public class PlayFabAuth : MonoBehaviour
             //If acc found
             message.text = "Welcome "+ user.text+" Connecting...";
             isAuthenticated = true;
+            mp.username = user.text;
             mp.ConnectToMaster();
             Debug.Log("You're logged in");
         }, error => {

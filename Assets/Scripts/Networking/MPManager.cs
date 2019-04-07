@@ -11,6 +11,7 @@ public class MPManager : Photon.MonoBehaviour
     public GameObject[] DisableOnConnection;
     public GameObject[] DisableOnJoinRoom;
     public GameObject[] EnableOnConnection;
+    public string username;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,5 +63,6 @@ public class MPManager : Photon.MonoBehaviour
             disable.SetActive(false);
         }
         GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+        player.GetComponent<Player>().username = username; 
     }
 }

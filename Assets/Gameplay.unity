@@ -1581,6 +1581,7 @@ MonoBehaviour:
   - {fileID: 512932528}
   EnableOnConnection:
   - {fileID: 512932528}
+  username: 
 --- !u!1 &676630734
 GameObject:
   m_ObjectHideFlags: 0

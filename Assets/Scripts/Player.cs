@@ -6,13 +6,13 @@ using TMPro;
 
 public class Player : Photon.PunBehaviour
 {
+    public TextMeshProUGUI userText;
     public TextMeshProUGUI healthText;
-    //BODY
-    public Rigidbody rg;
     public float speed; 
+    public Rigidbody rg;
+    public string username;
     private float x;
     private float z;
-    //HEALTH
     private float _health;
     private float _maxHealth = 100;
     private float _minHealth = 0;
@@ -23,7 +23,8 @@ public class Player : Photon.PunBehaviour
         _health = _maxHealth;
 
         if (photonView.isMine){
-            
+            userText.text = username;
+
         }else{
             
         }
@@ -80,10 +81,13 @@ public class Player : Photon.PunBehaviour
             
             //Mine component
             stream.SendNext(_health);
+            stream.SendNext(username);
         }else if(stream.isReading){
 
             //Their component
             _health = (float) stream.ReceiveNext();
+            username = (string) stream.ReceiveNext();
+            userText.text = username;
         }
     }
 }
