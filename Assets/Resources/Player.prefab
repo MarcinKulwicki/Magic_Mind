@@ -655,3 +655,4 @@ MonoBehaviour:
   speed: 20
   rg: {fileID: 0}
   username: 
+  camPosOffset: {x: 0, y: 5, z: -10}

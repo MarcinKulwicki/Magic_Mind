@@ -12,10 +12,15 @@ public class MPManager : Photon.MonoBehaviour
     public GameObject[] DisableOnJoinRoom;
     public GameObject[] EnableOnConnection;
     public string username;
+    private List<GameObject> spawnPoints = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
-        
+        foreach (Transform child in gameObject.transform)
+        {
+            if(child.tag == "SpawnPoint")
+                spawnPoints.Add(child.gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -62,7 +67,8 @@ public class MPManager : Photon.MonoBehaviour
         foreach(GameObject disable in DisableOnJoinRoom){
             disable.SetActive(false);
         }
-        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+        Vector3 pos = spawnPoints[Random.Range(0,spawnPoints.Count)].transform.position;
+        GameObject player = PhotonNetwork.Instantiate("Player", pos, Quaternion.identity, 0);
         player.GetComponent<Player>().username = username; 
     }
 }

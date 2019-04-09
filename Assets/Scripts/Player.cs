@@ -11,6 +11,7 @@ public class Player : Photon.PunBehaviour
     public float speed; 
     public Rigidbody rg;
     public string username;
+    public Vector3 camPosOffset;
     private float x;
     private float z;
     private float _health;
@@ -52,6 +53,10 @@ public class Player : Photon.PunBehaviour
 
             x = Input.GetAxisRaw("Horizontal");
             z = Input.GetAxisRaw("Vertical");
+
+            Vector3 camPos = Camera.main.transform.position;
+            Vector3 qPos = transform.position;
+            Camera.main.transform.position = Vector3.Lerp(camPos, new Vector3(qPos.x , qPos.y, qPos.z) + camPosOffset, 2f * Time.deltaTime);
 
             if(_health > _maxHealth){
                 _health = _maxHealth;
