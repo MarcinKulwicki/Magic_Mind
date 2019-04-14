@@ -44,4 +44,5 @@ MonoBehaviour:
   - RequestForPickupTimes
   - TaggedPlayer
   - Damage
+  - AddPlayerCount
   DisableAutoOpenWizard: 1

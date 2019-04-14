@@ -650,6 +650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf3899a853bd4f96a878af765539840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mp: {fileID: 0}
   userText: {fileID: 1865777289975788659}
   healthText: {fileID: 3563289062590591515}
   speed: 20

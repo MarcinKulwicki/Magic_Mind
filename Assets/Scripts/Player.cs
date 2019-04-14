@@ -6,6 +6,7 @@ using TMPro;
 
 public class Player : Photon.PunBehaviour
 {
+    public MPManager mp;
     public TextMeshProUGUI userText;
     public TextMeshProUGUI healthText;
     public float speed; 
@@ -50,6 +51,8 @@ public class Player : Photon.PunBehaviour
     void Update(){
 
         if (photonView.isMine){
+
+            if(!mp.gameStart) return;
 
             x = Input.GetAxisRaw("Horizontal");
             z = Input.GetAxisRaw("Vertical");

@@ -11,7 +11,13 @@ public class MPManager : Photon.MonoBehaviour
     public GameObject[] DisableOnConnection;
     public GameObject[] DisableOnJoinRoom;
     public GameObject[] EnableOnConnection;
+    public GameObject[] EnableOnJoinRoom;
+    public GameObject[] DisableOnRoomFull;
     public string username;
+    public int currentPlayer = 0;
+    public bool gameStart = false;
+    public TextMeshProUGUI timerText;
+    private float _timer = 3;
     private List<GameObject> spawnPoints = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
@@ -26,7 +32,23 @@ public class MPManager : Photon.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log("Current Player: "+currentPlayer);
+        // currentPlayer = PhotonNetwork.playerList.Length;
+        if(!gameStart){
+
+            if(currentPlayer == 2){
+                timerText.gameObject.SetActive(true);
+                foreach (GameObject disable in DisableOnRoomFull){
+                    disable.SetActive(false);
+                }
+                _timer -= Time.deltaTime;
+                timerText.text = "Starts in: "+ Mathf.Round(_timer);
+                if(_timer < 0){
+                    gameStart = true;
+                    timerText.gameObject.SetActive(false);
+                }
+            }
+        }
     }
     
 
@@ -62,13 +84,33 @@ public class MPManager : Photon.MonoBehaviour
         PhotonNetwork.CreateRoom("Default: "+rndID, rm, TypedLobby.Default);
     }
 
-    public virtual void OnJoinedRoom(){
+    public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info){
 
+        if(stream.isWriting){
+            
+            stream.SendNext(currentPlayer);
+        }else if(stream.isReading){
+
+           currentPlayer = (int) stream.ReceiveNext();
+        }
+    }
+
+    public virtual void OnJoinedRoom(){
+        photonView.RPC("AddPlayerCount", PhotonTargets.All);
         foreach(GameObject disable in DisableOnJoinRoom){
             disable.SetActive(false);
         }
+        foreach(GameObject enable in EnableOnJoinRoom){
+            enable.SetActive(true);
+        }
         Vector3 pos = spawnPoints[Random.Range(0,spawnPoints.Count)].transform.position;
         GameObject player = PhotonNetwork.Instantiate("Player", pos, Quaternion.identity, 0);
-        player.GetComponent<Player>().username = username; 
+        player.GetComponent<Player>().username = username;
+        player.GetComponent<Player>().mp = this;
+    }
+
+    [PunRPC]
+    void AddPlayerCount(){
+        currentPlayer++;
     }
 }
