@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon;
 using TMPro;
+using Photon.Pun;
 
-public class Player : Photon.PunBehaviour
+public class Player : MonoBehaviourPun , IPunObservable
 {
     public MPManager mp;
     public TextMeshProUGUI userText;
@@ -24,7 +25,7 @@ public class Player : Photon.PunBehaviour
         rg = GetComponent<Rigidbody>();
         _health = _maxHealth;
 
-        if (photonView.isMine){
+        if (photonView.IsMine){
             userText.text = username;
 
         }else{
@@ -35,9 +36,9 @@ public class Player : Photon.PunBehaviour
     private void OnCollisionEnter(Collision other) {
         if(other.gameObject.tag == "Hurt"){
 
-            if (photonView.isMine){
+            if (photonView.IsMine){
                 
-                photonView.RPC("Damage", PhotonTargets.All);
+                photonView.RPC("Damage", RpcTarget.All);
             }
         }
     }
@@ -50,7 +51,7 @@ public class Player : Photon.PunBehaviour
     // Update is called once per frame
     void Update(){
 
-        if (photonView.isMine){
+        if (photonView.IsMine){
 
             if(!mp.gameStart) return;
 
@@ -75,7 +76,7 @@ public class Player : Photon.PunBehaviour
     private void FixedUpdate() {
         
         healthText.text = _health.ToString();
-        if (photonView.isMine){
+        if (photonView.IsMine){
 
             rg.AddForce(new Vector3(x,0,z) * speed);
         }else{
@@ -85,12 +86,12 @@ public class Player : Photon.PunBehaviour
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info){
 
-        if(stream.isWriting){
+        if(stream.IsWriting){
             
             //Mine component
             stream.SendNext(_health);
             stream.SendNext(username);
-        }else if(stream.isReading){
+        }else if(stream.IsReading){
 
             //Their component
             _health = (float) stream.ReceiveNext();
